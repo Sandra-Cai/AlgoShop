@@ -1,68 +1,74 @@
-# AlgoShop
+# AlgoShop — Agentic Commerce with Live Market Intelligence
 
-**Agentic commerce powered by algorithmic trading strategies.**
+**Builder:** Sandra Cai | NYU | [LinkedIn](https://www.linkedin.com/in/yijia-sandra-cai/) | [GitHub](https://github.com/Sandra-Cai/AlgoShop)
 
-*Phia Hack 2026 · April 18–19 · Built in 24 hours*
+---
+
+## What I Built
+
+AlgoShop is a mobile-first agentic commerce platform that applies quantitative trading logic to everyday shopping. It combines a live algorithmic trading terminal, an LLM agent with tool-use chains, and real-time external data integrations into a single product — running on a FastAPI backend (~2,300 lines) and a raw-DOM single-page frontend (~8,500 lines, no React).
+
+The core thesis: the same infrastructure that makes trading desks fast and data-driven should exist for consumers buying sneakers or hotel rooms.
 
 ---
 
 ## Why This Problem
 
-I've spent the last three years inside trading pits — placing at the [Duke Fintech Trading Competition 2026](https://www.linkedin.com/in/yijia-sandra-cai/) as a Top Trader and winning the Phoenix Trading Competition in 2023. In quant finance, I obsess over microstructure: the spread between bid and ask, VWAP deviations, RSI extremes, mean reversion after an overreaction. I treat every basis point like it matters, because over thousands of trades, it does.
-
-Then I go shopping and watch friends pay $180 for a Nike hoodie that will be $119 in eleven days, or buy a hotel room at list price when the rate curve is clearly in contango. **Consumer shopping is the most inefficient market on Earth** — asymmetric information, emotional buyers, no order book, no execution discipline. Meanwhile, Phia is building the autonomous agent layer that could finally fix this: if the agent can "just handle it," why shouldn't it handle it *like a quant desk*?
-
-AlgoShop is that thesis shipped as a product.
-
-## The Solution
-
-AlgoShop is a mobile-first agentic commerce platform that turns every SKU into a tradeable instrument. Users get:
-
-- A **live algo trading terminal** for consumer goods — candlestick charts, order book depth, VWAP, RSI/MACD/EMA/Bollinger overlays.
-- **Eight quantitative shopping strategies** (VWAP, Bollinger Bands, EMA Crossover, RSI, MACD, Momentum, Mean Reversion, Order Flow) mapped to real shopping outcomes with 5–25% documented savings per strategy.
-- **Limit orders on products**: set a price, walk away, auto-execute when the market hits your bid. Measured save rate across the demo catalog is **44%** vs retail.
-- An **LLM agent with a tool-use chain** that searches 40,000+ sites (Phia-aligned), pulls quant signals, compares retail vs resale, and returns formatted recommendations with one-tap action buttons.
-- **Social shopping**: friends' strategies, order books, and live savings feed — turning execution alpha into a shareable flex.
-- **InterestRank personalization**: a PageRank-style authority score over the product graph, personalized by email subscriptions, browsing, social, and purchase signals, with user-adjustable weights.
-
-This hits all three of Phia's interest areas — Autonomous Agents, Personalized Shopping, Social Shopping — through a single coherent lens: **execution quality**.
-
-## Technical Stack
-
-**Frontend** — Single-page mobile-first web app, ~8,200 lines of hand-written HTML/CSS/JS. Seven tabs (Shop, Stores, Book, Agent, Strategies, Trends, Friends), full dark/light theming, live deal ticker, savings tracker, and a Diamond Saver tier system (Explorer → Saver → Smart → Deal Pro → Diamond). No framework bloat — every animation, chart, and order-book update is raw DOM + Canvas for 60fps on mid-tier phones.
-
-**Backend** — FastAPI (Python), organized as five modules:
-
-- `agent_server.py` (~2,300 lines) — 26-product demo catalog, real-time price simulation loop, trading endpoints (place/cancel/fill), and the LLM agent runtime with a tool-use chain (search → quant signals → price compare → action).
-- `data_engine.py` — v3.0 product data engine, Phia-aligned, normalizes listings across retail, resale, and affiliate sources.
-- `interest_rank.py` — v4.0 **InterestRank** algorithm: PageRank + HITS + Eigenvector Centrality over an adjacency matrix of the product graph. Personalized by user signals with live-tunable weights.
-- `order_book.py` — Full limit order book with bid/ask depth, spread, VWAP computation, and an auto-execution engine that fires when the simulated market prints through a resting limit.
-- `connectors.py` — External integrations: **Trivago** (hotel price comparison), **Blockscout** (on-chain transaction verification), **GoDaddy** (domain verification to flag sketchy stores).
-
-**Algo Trading Terminal (Book tab)** — Real-time price charts (24H / 48H / ALL), live order book, spread and VWAP readouts, and four technical overlays (RSI, MACD, EMA crossover, Bollinger Bands) computed server-side and streamed to the client. Strategy P&L tracker compares retail price vs AlgoShop execution price per order.
-
-**AI Agent** — LLM-powered, tool-use chain across search, quant signals, and price comparison. Outputs are formatted markdown tables with inline action buttons that can set price alerts or trigger autonomous buys. Built to slot directly into Phia's agentic shopping paradigm.
-
-**Personalization & Social** — Email subscription detection (auto-discovers deals from Nike, Sephora, etc.), contact import, friends' strategies and order books, live activity feed of friends' fills and savings.
-
-## Technical Challenges & How I Solved Them
-
-**1. Phia has no public API.** Phia's underlying shopping graph is proprietary, so there was no drop-in data source. I built a Phia-aligned data pipeline that composes web data extraction, email subscription parsing, and real-time price monitoring across a 40,000+ site universe into a normalized product graph that mirrors Phia's discovery surface. This is the unlock that made everything else possible.
-
-**2. Realistic real-time price microstructure.** Static mock data would make the trading terminal meaningless. I wrote a custom simulation engine that generates price paths with **volatility clustering, trend momentum, and mean reversion** — a simplified GBM-with-regime-switching analogue to real market microstructure — so that RSI, MACD, and Bollinger signals actually behave the way a trader expects and limit orders fill plausibly.
-
-**3. InterestRank on the product graph.** Adapting PageRank to shopping required redefining the graph: products are nodes, edges are bought-together / same-brand / similar-category / co-viewed relationships, weighted by user signal. I then combined **PageRank** (global authority), **HITS** (hub/authority split for brand vs product), and **Eigenvector Centrality** (spectral importance) over the live adjacency matrix. Personalization is injected as a teleportation vector derived from the user's email subs, browsing, social graph, and purchase history, with weights the user can tune in-app.
-
-**4. Markdown rendering inside the agent chat.** The agent's power comes from returning rich formatted output — tables of comparable SKUs, blockquote callouts, horizontal-rule-separated sections. Off-the-shelf parsers either broke on streaming tokens or pulled in too much weight. I wrote a custom block-level markdown parser (headers, tables, blockquotes, horizontal rules, inline emphasis) tuned for incremental rendering so responses paint smoothly as the LLM streams.
-
-## Impact
-
-AlgoShop reframes shopping as a market you can trade, not a menu you accept. The demo catalog shows a **44% average save rate** vs retail when strategies execute end-to-end. For Phia, this is a direct extension of the autonomous agent thesis — the agent doesn't just find the product, it *times the entry* — while simultaneously deepening personalization (InterestRank) and social (shared order books, friends' strategies).
+Placing top at the Duke Fintech Trading Competition 2026 and Phoenix Trading Competition 2023, I learned that trading edge comes from better signals, faster execution, and disciplined strategy — not intuition. Retail consumers make purchase decisions with worse information than a first-year analyst making a $100 trade. AlgoShop is the fix.
 
 ---
 
-## Built By
+## Technical Implementation
 
-**Yijia (Sandra) Cai** — NYU · Top Trader, [Duke Fintech Trading Competition 2026](https://www.linkedin.com/in/yijia-sandra-cai/) · Winner Trader, Phoenix Trading Competition 2023 · [LinkedIn](https://www.linkedin.com/in/yijia-sandra-cai/)
+**Backend (FastAPI, Python)**
+Five modules handle all logic: `agent_server.py` (LLM tool-use chain), `data_engine.py` (product scoring, VWAP, strategy execution), `interest_rank.py` (InterestRank v4.0 — PageRank + HITS + EigenCentrality on a product-interest graph), `order_book.py` (limit order placement and auto-execution), and `connectors.py` (live external data ingestion from three APIs).
 
-*Solo build over 24 hours at the Phia Hack, April 18–19, 2026.*
+**Live External Data — the critical proof of real-world readiness**
+
+`connectors.py` drives three live integrations, all returning real API data with proper parsing and graceful fallbacks:
+
+- **Trivago** — Hotel deals in the Stores tab with live prices, ratings, and images (25 NYC hotels, $135–$581/night). The same ranking and order logic that works on a $90 jacket works on a $300 hotel room.
+- **Blockscout** — On-chain commerce intelligence panel: live ETH price ($2,311), gas (2.1 Gwei), 3.4B total transactions, SHOP/SHOPX/SHOPON token prices.
+- **GoDaddy** — Domain verification on store listings. Every retailer gets a legitimacy signal before a limit order fires.
+
+A **Live Data Sources Banner** surfaces all five connected sources (Web, Trivago, Blockscout, GoDaddy, Phia DB) with animated pulse indicators — data provenance always visible.
+
+**Frontend (Single-page, raw DOM)**
+The interface is organized into four tabs: Shop (26-product demo catalog, InterestRank-scored), Book (live algo trading terminal with candlestick charts, order book, VWAP, RSI/MACD/EMA/Bollinger Bands), Agent (LLM tool-use chain with streamed reasoning), and Stores (verified retailers + Trivago hotel deals). Dark/light mode, gift sharing, chat threads, and email subscription detection are all live.
+
+**8 Quantitative Shopping Strategies:** Momentum Buy, Mean Reversion, VWAP Snipe, Breakout Entry, RSI Oversold, Bollinger Band Squeeze, Trend Follow, Limit Ladder — each maps a proven trading strategy onto product price history and inventory signals. Users set a price target; `order_book.py` auto-executes when conditions are met.
+
+---
+
+## Key Decisions
+
+1. **No React.** Raw DOM manipulation kept the bundle lean and the mobile experience fast. Complexity lives in the backend, not the client.
+2. **connectors.py as a unified data layer.** Rather than ad-hoc API calls, all three external sources funnel through one module with consistent error handling. This made adding Trivago, Blockscout, and GoDaddy in parallel tractable for a solo build.
+3. **InterestRank over simple collaborative filtering.** PageRank + HITS + EigenCentrality on the product-interest graph surfaces non-obvious recommendations with explainable math — a signal that can be tuned against Phia's conversion and return-rate KPIs.
+
+---
+
+## Alignment with Phia's Vision
+
+AlgoShop directly addresses three of Phia's five interest areas:
+
+- **Autonomous Agents** — The LLM agent with tool-use chain handles limit order execution, strategy selection, and cross-tab coordination without user intervention. It "just handles it."
+- **Personalized Shopping** — InterestRank v4.0 and 8 quantitative strategies produce a ranked, personalized product surface that updates on every session signal.
+- **Social Shopping** — Friends' strategies, shared order books, and a live savings feed make every user's alpha visible to their network.
+
+AlgoShop is built to be the technical intelligence layer underneath Phia's consumer-facing experience — the same role Phia plays as the "AI alignment layer" between consumers and brands.
+
+---
+
+## What I'd Build Next with Full Phia Access
+
+Given access to Phia's 350M+ product catalog, 7,200 brand partners, and 1M+ user graph, the next three builds would be:
+
+1. **InterestRank on the full Phia graph.** Running EigenCentrality across 1M users and 350M products would produce a recommendation signal that no individual retailer can match. The math scales; the current demo catalog of 26 products is the proof-of-concept.
+2. **Limit orders against live Phia price data.** The order book infrastructure is complete. Wiring it to real-time price feeds from brand partners would make autonomous price-target execution production-ready, directly improving conversion rates and reducing return rates.
+3. **Post-purchase intelligence loop.** After execution, feed order outcomes (satisfaction signals, return events, reorder rates) back into the strategy scoring model. Every completed order makes the next recommendation more accurate — closing the loop that turns AlgoShop from a shopping tool into a compounding intelligence system.
+
+---
+
+**GitHub:** https://github.com/Sandra-Cai/AlgoShop  
+**Built by:** Sandra Cai
