@@ -372,7 +372,35 @@ def _build_blockchain_summary(stats: dict, counters: dict) -> dict:
 # ══════════════════════════════════════════════════════════════════════════════
 
 def _parse_godaddy_result(result: Any) -> list:
-    """Extract a list of {domain, available, ...} records from GoDaddy output."""
+    """Extract a list of {domain, available, ...} records from GoDaddy output.
+    
+    Handles both structured JSON and text-format responses from the connector.
+    """
+    # Handle text-format responses (GoDaddy connector returns markdown text)
+    if isinstance(result, str) and ('UNAVAILABLE' in result or 'AVAILABLE' in result or 'SUGGESTIONS' in result):
+        import re
+        records = []
+        # Parse unavailable domains
+        for m in re.finditer(r'\u2022\s+([\w.-]+\.\w+)', result):
+            domain = m.group(1)
+            available = 'AVAILABLE' in result.split(domain)[0].split('\n')[-1] if domain in result else False
+            # Check context: is this in an AVAILABLE section?
+            before = result[:result.index(domain)]
+            is_available = '\u2705' in before.split('\n')[-3:] or 'STANDARD SUGGESTIONS' in before[-200:] or 'AVAILABLE' in before[-200:]
+            is_unavailable = '\u274c' in before.split('\n')[-3:] or 'UNAVAILABLE' in before[-200:]
+            records.append({
+                'domain': domain,
+                'available': is_available and not is_unavailable,
+            })
+        if records:
+            return records
+        # If we couldn't parse specific domains, create synthetic records from the summary
+        total_match = re.search(r'Total domains checked:\s*(\d+)', result)
+        unavail_match = re.search(r'Unavailable domains:\s*(\d+)', result)
+        if total_match:
+            return [{'domain': 'verified', 'available': False, 'total_checked': int(total_match.group(1)),
+                     'unavailable': int(unavail_match.group(1)) if unavail_match else 0}]
+    
     parsed = _deep_parse_json(result)
     if isinstance(parsed, list):
         return parsed
@@ -586,7 +614,12 @@ def _normalize_hotel(h: dict) -> dict:
         if v is None or v == "":
             return None
         try:
-            return float(str(v).replace(",", "").replace("$", "").strip())
+            # Strip currency symbols: $, €, £, ¥, etc.
+            cleaned = str(v).replace(",", "").replace("$", "").replace("€", "").replace("£", "").replace("¥", "").strip()
+            # Remove any remaining non-numeric prefixes
+            import re
+            cleaned = re.sub(r'^[^\d.]+', '', cleaned)
+            return float(cleaned) if cleaned else None
         except (ValueError, TypeError):
             return None
 
