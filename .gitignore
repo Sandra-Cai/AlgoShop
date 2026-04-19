@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+*.pyo
+index_*_backup.html
+add_images.py
+.DS_Store
