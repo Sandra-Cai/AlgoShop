@@ -63,6 +63,4 @@ AlgoShop reframes shopping as a market you can trade, not a menu you accept. The
 
 ## Built By
 
-**Sandra Cai** — NYU · Top Trader, [Duke Fintech Trading Competition 2026](https://www.linkedin.com/in/yijia-sandra-cai/) · Winner Trader, Phoenix Trading Competition 2023 · [LinkedIn](https://www.linkedin.com/in/yijia-sandra-cai/)
-
-*Solo build over 24 hours at the Phia Hack, April 18–19, 2026.*
+Sandra Cai
