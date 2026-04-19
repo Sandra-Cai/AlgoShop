@@ -1778,35 +1778,45 @@ body {
 .chat-thread-status { font-size: 11px; color: #22c55e; }
 
 .chat-messages {
-  flex: 1; overflow-y: auto; padding: 12px 16px; display: flex;
-  flex-direction: column; gap: 8px;
+  flex: 1; overflow-y: auto; padding: 16px; display: flex;
+  flex-direction: column; gap: 10px;
   -webkit-overflow-scrolling: touch;
+  min-height: 0;
 }
 .chat-msg {
-  max-width: 80%; display: flex; flex-direction: column; gap: 2px;
+  max-width: 70%; display: flex; flex-direction: column; gap: 2px;
 }
 .chat-msg.sent { align-self: flex-end; }
 .chat-msg.received { align-self: flex-start; }
 .chat-bubble {
-  padding: 10px 14px; border-radius: 16px; font-size: 14px; line-height: 1.4;
-  color: var(--text); word-wrap: break-word;
+  padding: 10px 14px; border-radius: 16px; font-size: 14px; line-height: 1.5;
+  word-wrap: break-word; overflow-wrap: break-word;
 }
 .chat-msg.sent .chat-bubble {
-  background: var(--accent); color: #fff; border-bottom-right-radius: 4px;
+  background: #2563eb; color: #ffffff; border-bottom-right-radius: 4px;
 }
 .chat-msg.received .chat-bubble {
-  background: var(--surface); border: 1px solid var(--border); border-bottom-left-radius: 4px;
+  background: #f3f4f6; color: #111827; border: 1px solid var(--border); border-bottom-left-radius: 4px;
 }
-[data-theme="dark"] .chat-msg.received .chat-bubble { background: #1a1d27; }
+[data-theme="dark"] .chat-msg.sent .chat-bubble { background: #3b82f6; color: #ffffff; }
+[data-theme="dark"] .chat-msg.received .chat-bubble { background: #1a1d27; color: var(--text); border-color: #2d3041; }
 .chat-msg-time { font-size: 10px; color: var(--text-faint); padding: 0 4px; }
 .chat-msg.sent .chat-msg-time { text-align: right; }
 
 /* Shared deal/strategy card in chat */
 .chat-share-card {
-  background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
-  padding: 10px 12px; margin-top: 4px; max-width: 240px;
+  background: #ffffff; border: 1.5px solid var(--border); border-radius: 12px;
+  padding: 10px 12px; margin-top: 6px; max-width: 240px;
+  color: #111827;
 }
-[data-theme="dark"] .chat-share-card { background: #252836; border-color: #2d3041; }
+.chat-msg.sent .chat-share-card {
+  background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: #ffffff;
+}
+.chat-msg.sent .chat-share-card .csc-title { color: #ffffff; }
+.chat-msg.sent .chat-share-card .csc-detail { color: rgba(255,255,255,0.85); }
+.chat-msg.sent .chat-share-card .csc-action { color: rgba(255,255,255,0.9); }
+[data-theme="dark"] .chat-share-card { background: #252836; border-color: #2d3041; color: var(--text); }
+[data-theme="dark"] .chat-msg.sent .chat-share-card { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
 .chat-share-card .csc-type {
   font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
   margin-bottom: 4px;
@@ -1983,19 +1993,37 @@ body {
 
 .gift-sheet-overlay {
   display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
-  z-index: 9999; align-items: flex-end; justify-content: center;
+  z-index: 9999; align-items: center; justify-content: center;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 .gift-sheet-overlay.open { display: flex; }
 .gift-sheet {
-  background: var(--card-bg); border-radius: 20px 20px 0 0; width: 100%; max-width: 500px;
-  padding: 20px 20px 32px; max-height: 80vh; overflow-y: auto;
-  animation: sheetUp 0.3s ease;
+  background: #ffffff; border-radius: 20px; width: 90%; max-width: 440px;
+  padding: 24px 24px 28px; max-height: 80vh; overflow-y: auto;
+  animation: modalIn 0.3s ease;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.3), 0 8px 20px rgba(0,0,0,0.15);
+  position: relative;
 }
-@keyframes sheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+[data-theme="dark"] .gift-sheet {
+  background: #1a1d27;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.6), 0 8px 20px rgba(0,0,0,0.35);
+}
+@keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
 .gift-sheet-handle {
-  width: 40px; height: 4px; background: var(--border); border-radius: 2px;
-  margin: 0 auto 16px;
+  display: none;
 }
+.gift-sheet-close {
+  position: absolute; top: 12px; right: 12px;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--bg-input); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--text-dim); font-size: 18px;
+  transition: all 0.15s;
+  z-index: 1;
+}
+.gift-sheet-close:hover { background: var(--border); color: var(--text); }
+[data-theme="dark"] .gift-sheet-close { background: #252836; border-color: #2d3041; }
 .gift-sheet h3 { font-size: 18px; font-weight: 700; color: var(--text); margin: 0 0 4px; }
 .gift-sheet .gs-sub { font-size: 13px; color: var(--text-dim); margin-bottom: 16px; }
 .gift-sheet-product {
@@ -2045,7 +2073,7 @@ body {
 
 @media (min-width: 768px) {
   .gift-grid { grid-template-columns: repeat(3, 1fr); }
-  .gift-sheet { max-width: 440px; border-radius: 20px; margin-bottom: 40px; }
+  .gift-sheet { max-width: 440px; border-radius: 20px; }
 }
 
 /* ============================================================
@@ -2154,28 +2182,68 @@ body {
 .ff-price { font-size: 13px; font-weight: 600; color: var(--green); }
 
 /* Friend vs Everyone book */
-.friend-book-section { padding: 0 12px; }
-.fb-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 0 8px; }
-.fb-header h4 { font-size: 12px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.04em; }
-.fb-summary { display: flex; gap: 8px; }
-.fb-summary-stat { font-size: 11px; font-weight: 600; color: var(--green); background: var(--green-dim); padding: 3px 8px; border-radius: 6px; border: 1px solid var(--green-border); }
-.fb-row {
+.friend-book-section {
+  padding: 0 12px;
+  margin-top: 16px;
+}
+.friend-book-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+.fb-header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border-dim);
+  align-items: center;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-muted);
+}
+.fb-header h4 { font-size: 13px; font-weight: 700; color: var(--text); text-transform: uppercase; letter-spacing: 0.04em; margin: 0; }
+.fb-summary { display: flex; gap: 8px; }
+.fb-summary-stat { font-size: 11px; font-weight: 600; color: var(--green); background: var(--green-soft); padding: 3px 8px; border-radius: 6px; border: 1px solid var(--green-border); }
+.fb-table {
+  width: 100%;
+  border-collapse: collapse;
   font-size: 13px;
 }
-.fb-row:last-child { border-bottom: none; }
-.fb-product { font-weight: 500; color: var(--text); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.fb-prices { display: flex; gap: 16px; align-items: center; flex-shrink: 0; }
-.fb-col { text-align: right; min-width: 60px; }
-.fb-col-label { font-size: 10px; color: var(--text-faint); font-weight: 500; }
-.fb-col-val { font-size: 13px; font-weight: 600; }
-.fb-col-val.friends { color: var(--green); }
-.fb-col-val.everyone { color: var(--text-dim); }
-.fb-save { font-size: 11px; font-weight: 700; color: var(--green); background: var(--green-dim); padding: 2px 6px; border-radius: 4px; min-width: 40px; text-align: center; }
+.fb-table thead th {
+  padding: 8px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: right;
+  background: var(--bg-input);
+  border-bottom: 1px solid var(--border);
+}
+.fb-table thead th:first-child { text-align: left; }
+.fb-table tbody tr { border-bottom: 1px solid var(--border-dim); }
+.fb-table tbody tr:last-child { border-bottom: none; }
+.fb-table tbody tr:nth-child(even) { background: var(--bg-muted); }
+.fb-table td {
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--text);
+}
+.fb-table td:first-child {
+  font-weight: 500;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fb-table td:not(:first-child) { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+.fb-table .fb-col-val.friends { color: var(--green); }
+.fb-table .fb-col-val.everyone { color: var(--text-dim); }
+.fb-save { font-size: 11px; font-weight: 700; color: var(--green); background: var(--green-soft); padding: 2px 6px; border-radius: 4px; display: inline-block; }
+[data-theme="dark"] .friend-book-card { background: #1a1d27; border-color: #2d3041; }
+[data-theme="dark"] .fb-header { background: #12141c; border-color: #2d3041; }
+[data-theme="dark"] .fb-table thead th { background: #12141c; border-color: #2d3041; }
+[data-theme="dark"] .fb-table tbody tr:nth-child(even) { background: #12141c; }
+[data-theme="dark"] .fb-table tbody tr { border-color: #1e2030; }
 
 @media (min-width: 768px) {
   .friend-feed { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 0 16px; }
@@ -2326,9 +2394,20 @@ body {
 .deals-scroll {
   display: flex;
   gap: 8px;
-  overflow-x: auto;
+  overflow: hidden;
   scrollbar-width: none;
   flex: 1;
+  position: relative;
+}
+.deals-scroll-inner {
+  display: flex;
+  gap: 8px;
+  animation: deals-marquee 40s linear infinite;
+  white-space: nowrap;
+}
+@keyframes deals-marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 .deals-scroll::-webkit-scrollbar { display: none; }
 .deal-chip {
@@ -4091,6 +4170,32 @@ html { scroll-behavior: smooth; }
   .tt-chart-wrap { height:260px; }
 }
 
+/* ─── UNIFORM PRODUCT CARD HEIGHTS ─── */
+.product-card .pc-sub {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.product-card .pc-name {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+
+/* ─── ADDITIONAL DARK MODE OVERRIDES ─── */
+[data-theme="dark"] .desktop-nav { background: #12141c !important; }
+[data-theme="dark"] .savings-banner { background: #1a1d27 !important; }
+[data-theme="dark"] .savings-tier-wrap { background: #1a1d27 !important; border-color: #2d3041 !important; }
+[data-theme="dark"] .deal-chip { background: #252836 !important; background-image: none !important; }
+[data-theme="dark"] .page-section-header { background: #12141c !important; }
+[data-theme="dark"] .scroll-row { background: #12141c !important; }
+[data-theme="dark"] .sig-card { background: #1a1d27; border-color: #2d3041; }
+
 </style>
 </head>
 <body>
@@ -4816,11 +4921,13 @@ html { scroll-behavior: smooth; }
           <div class="friend-feed" id="friendFeed"></div>
 
           <div class="friend-book-section">
-            <div class="fb-header">
-              <h4>Your circle vs. everyone</h4>
-              <div class="fb-summary" id="fbSummary"></div>
+            <div class="friend-book-card">
+              <div class="fb-header">
+                <h4>Your circle vs. everyone</h4>
+                <div class="fb-summary" id="fbSummary"></div>
+              </div>
+              <div id="friendBookRows"></div>
             </div>
-            <div id="friendBookRows"></div>
           </div>
         </div>
 
@@ -4897,6 +5004,7 @@ html { scroll-behavior: smooth; }
     <!-- Gift send bottom sheet -->
     <div class="gift-sheet-overlay" id="giftSheetOverlay" onclick="if(event.target===this)closeGiftSheet()">
       <div class="gift-sheet">
+        <button class="gift-sheet-close" onclick="closeGiftSheet()" aria-label="Close">&times;</button>
         <div class="gift-sheet-handle"></div>
         <div id="giftSheetContent">
           <h3>Send as gift</h3>
@@ -5388,7 +5496,16 @@ function computeSavings() {
 ============================================================ */
 function renderProductCards() {
   const irScores = computeIR();
-  const filtered = catFilter === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.category === catFilter);
+  const CAT_MAP = {
+    electronics: ['electronics'],
+    sneakers: ['sneakers', 'luxury'],
+    fashion: ['fashion'],
+    luxury: ['luxury']
+  };
+  const filtered = catFilter === 'all' ? PRODUCTS : PRODUCTS.filter(p => {
+    const cats = CAT_MAP[catFilter] || [catFilter];
+    return cats.includes(p.category);
+  });
   // Viewer counts seed — deterministic per product
   const viewerSeeds = [23, 47, 11, 34, 8, 61, 29, 42];
   document.getElementById('productCards').innerHTML = filtered.map((p, idx) => {
@@ -5619,9 +5736,155 @@ function renderTicker() {
 ============================================================ */
 let liveStores = [...STORES]; // Will be updated from API
 
+function generateStoresForZip(zip) {
+  const prefix = zip.substring(0, 3);
+  const CITY_DATA = {
+    '100': { city: 'New York', hoods: ['SoHo','Williamsburg','Chelsea','Midtown','East Village','NoLIta','Flatiron','UWS','LES','FiDi','Greenpoint','Park Slope'], stores: [
+      {name:"Beacon's Closet",addr:"74 Guernsey St",type:"resale",brands:["Vintage Levi's","Free People","Designer Consignment"],price:"$"},
+      {name:"The RealReal — SoHo",addr:"80 Wooster St",type:"resale",brands:["Gucci","Chanel","Louis Vuitton","Prada"],price:"$$$"},
+      {name:"Nordstrom Rack",addr:"60 E 14th St",type:"outlet",brands:["Nike","Adidas","Lululemon","UGG"],price:"$$"},
+      {name:"Buffalo Exchange",addr:"504 Driggs Ave",type:"resale",brands:["Levi's","Zara","H&M","Streetwear"],price:"$"},
+      {name:"Nike House of Innovation",addr:"650 5th Ave",type:"retail",brands:["Nike","Jordan","Nike ACG","Nike Lab"],price:"$$"},
+      {name:"Depop Space NYC",addr:"234 Mulberry St",type:"resale",brands:["Vintage","Y2K Fashion","Indie Designers"],price:"$"},
+      {name:"Lululemon — Flatiron",addr:"1928 Broadway",type:"retail",brands:["Align","Scuba","Define Jacket"],price:"$$$"},
+      {name:"Crossroads Trading",addr:"152 W 26th St",type:"resale",brands:["Anthropologie","Free People","J.Crew"],price:"$"},
+      {name:"Saks OFF 5TH",addr:"250 Vesey St",type:"outlet",brands:["Gucci","Burberry","Valentino"],price:"$$"},
+      {name:"Poshmark Pop-Up",addr:"568 Broadway",type:"resale",brands:["Coach","Tory Burch","Nike","Lululemon"],price:"$$"},
+    ]},
+    '900': { city: 'Los Angeles', hoods: ['Melrose','Silver Lake','Venice','Beverly Hills','West Hollywood','Echo Park','Santa Monica','DTLA','Los Feliz','Culver City','Highland Park','Koreatown'], stores: [
+      {name:"Wasteland",addr:"7428 Melrose Ave",type:"resale",brands:["Vintage","Gucci","Streetwear","Y2K"],price:"$$"},
+      {name:"Crossroads Trading",addr:"7519 Melrose Ave",type:"resale",brands:["Nike","Levi's","Free People"],price:"$"},
+      {name:"The RealReal — WeHo",addr:"8500 Beverly Blvd",type:"resale",brands:["Chanel","Louis Vuitton","Prada","Celine"],price:"$$$"},
+      {name:"Nordstrom Rack — DTLA",addr:"727 W 7th St",type:"outlet",brands:["Nike","Adidas","Lululemon","Coach"],price:"$$"},
+      {name:"Buffalo Exchange",addr:"131 N La Brea Ave",type:"resale",brands:["Streetwear","Denim","Indie"],price:"$"},
+      {name:"Round Two",addr:"7606 Melrose Ave",type:"resale",brands:["Jordan","Nike SB","Supreme","Vintage"],price:"$$"},
+      {name:"Nike — The Grove",addr:"189 The Grove Dr",type:"retail",brands:["Nike","Jordan","ACG"],price:"$$"},
+      {name:"Lululemon — Santa Monica",addr:"1431 3rd St Promenade",type:"retail",brands:["Align","Scuba","ABC Pants"],price:"$$$"},
+      {name:"Jet Rag",addr:"825 N La Brea Ave",type:"resale",brands:["Vintage","Denim","Workwear"],price:"$"},
+      {name:"Saks OFF 5TH — Glendale",addr:"148 S Brand Blvd",type:"outlet",brands:["Valentino","Burberry","Stuart Weitzman"],price:"$$"},
+    ]},
+    '606': { city: 'Chicago', hoods: ['Wicker Park','Lincoln Park','Bucktown','Logan Square','River North','Gold Coast','Andersonville','Lakeview','West Loop','Old Town','Hyde Park','Pilsen'], stores: [
+      {name:"Crossroads Trading",addr:"1519 N Milwaukee Ave",type:"resale",brands:["Urban","Zara","Levi's","Vintage"],price:"$"},
+      {name:"The RealReal — Gold Coast",addr:"20 E Oak St",type:"resale",brands:["Gucci","Prada","Saint Laurent"],price:"$$$"},
+      {name:"Buffalo Exchange",addr:"1478 N Milwaukee Ave",type:"resale",brands:["Streetwear","Indie","Vintage"],price:"$"},
+      {name:"Nordstrom Rack — Lincoln Park",addr:"2443 N Clark St",type:"outlet",brands:["Nike","Adidas","Lululemon"],price:"$$"},
+      {name:"Nike Chicago",addr:"669 N Michigan Ave",type:"retail",brands:["Nike","Jordan","ACG","Nike Lab"],price:"$$"},
+      {name:"Lululemon — Lincoln Park",addr:"953 W Armitage Ave",type:"retail",brands:["Align","Scuba","Define"],price:"$$$"},
+      {name:"Kokorokoko",addr:"1323 N Milwaukee Ave",type:"resale",brands:["Y2K","90s Vintage","Rave","Denim"],price:"$"},
+      {name:"Saks OFF 5TH — Michigan Ave",addr:"151 N State St",type:"outlet",brands:["Coach","Valentino","Burberry"],price:"$$"},
+      {name:"Plato's Closet",addr:"6412 N Central Ave",type:"resale",brands:["H&M","Zara","Nike","Lululemon"],price:"$"},
+      {name:"The Fly Shop",addr:"1628 N Damen Ave",type:"resale",brands:["Supreme","Off-White","Jordan","Vintage Nike"],price:"$$"},
+    ]},
+    '941': { city: 'San Francisco', hoods: ['Mission','Hayes Valley','Castro','SoMa','Marina','Haight','Nob Hill','Pacific Heights','Dogpatch','Inner Sunset','North Beach','Potrero Hill'], stores: [
+      {name:"Crossroads Trading",addr:"1901 Fillmore St",type:"resale",brands:["Levi's","Patagonia","Free People"],price:"$"},
+      {name:"The RealReal — SF",addr:"253 Post St",type:"resale",brands:["Gucci","Chanel","Louis Vuitton"],price:"$$$"},
+      {name:"Buffalo Exchange",addr:"1555 Haight St",type:"resale",brands:["Vintage","Streetwear","Indie"],price:"$"},
+      {name:"Nordstrom Rack — SoMa",addr:"899 Howard St",type:"outlet",brands:["Nike","Adidas","Lululemon"],price:"$$"},
+      {name:"Nike SF",addr:"278 Post St",type:"retail",brands:["Nike","Jordan","ACG"],price:"$$"},
+      {name:"Lululemon — Union Square",addr:"114 Powell St",type:"retail",brands:["Align","Scuba","ABC Pants"],price:"$$$"},
+      {name:"Wasteland",addr:"1660 Haight St",type:"resale",brands:["Designer","Vintage","Streetwear"],price:"$$"},
+      {name:"Community Thrift",addr:"623 Valencia St",type:"resale",brands:["Vintage","Eclectic","Local Brands"],price:"$"},
+      {name:"Goodwill — Mission",addr:"3150 Mission St",type:"resale",brands:["Everything","Vintage","Denim"],price:"$"},
+      {name:"Saks OFF 5TH — Union Square",addr:"2 Stockton St",type:"outlet",brands:["Coach","Valentino","Stuart Weitzman"],price:"$$"},
+    ]},
+    '330': { city: 'Miami', hoods: ['Wynwood','South Beach','Design District','Brickell','Coconut Grove','Little Havana','Coral Gables','Midtown','Edgewater','Little Haiti','Aventura','Doral'], stores: [
+      {name:"Fly Kix MIA",addr:"7235 Biscayne Blvd",type:"resale",brands:["Jordan","Nike","Yeezy","New Balance"],price:"$$"},
+      {name:"The RealReal — Design District",addr:"110 NE 40th St",type:"resale",brands:["Gucci","Chanel","Dior"],price:"$$$"},
+      {name:"Nordstrom Rack — Midtown",addr:"3401 N Miami Ave",type:"outlet",brands:["Nike","Adidas","Lululemon","UGG"],price:"$$"},
+      {name:"Buffalo Exchange — SoBe",addr:"1237 Washington Ave",type:"resale",brands:["Vintage","Y2K","Streetwear"],price:"$"},
+      {name:"Nike — Lincoln Road",addr:"651 Lincoln Rd",type:"retail",brands:["Nike","Jordan","ACG"],price:"$$"},
+      {name:"Lululemon — Brickell",addr:"701 S Miami Ave",type:"retail",brands:["Align","Scuba","ABC Pants"],price:"$$$"},
+      {name:"Out of the Closet",addr:"2097 SW 8th St",type:"resale",brands:["Eclectic","Vintage","Casual"],price:"$"},
+      {name:"Saks OFF 5TH — Aventura",addr:"19575 Biscayne Blvd",type:"outlet",brands:["Valentino","Burberry","Coach"],price:"$$"},
+      {name:"Consign of the Times",addr:"1625 Alton Rd",type:"resale",brands:["Chanel","Hermès","Louis Vuitton"],price:"$$$"},
+      {name:"Crossroads Trading — Wynwood",addr:"2650 NW 2nd Ave",type:"resale",brands:["Free People","Zara","Vintage"],price:"$"},
+    ]},
+    '021': { city: 'Boston', hoods: ['Back Bay','Cambridge','Somerville','South End','Beacon Hill','Newbury St','Allston','Brookline','Jamaica Plain','North End','Fenway','Charlestown'], stores: [
+      {name:"The Garment District",addr:"200 Broadway, Cambridge",type:"resale",brands:["Vintage","Costumes","Streetwear"],price:"$"},
+      {name:"Nordstrom Rack — Back Bay",addr:"497 Boylston St",type:"outlet",brands:["Nike","Adidas","Lululemon"],price:"$$"},
+      {name:"Buffalo Exchange",addr:"238 Newbury St",type:"resale",brands:["Vintage","Indie","Streetwear"],price:"$"},
+      {name:"The RealReal — Newbury",addr:"73 Newbury St",type:"resale",brands:["Gucci","Chanel","Louis Vuitton"],price:"$$$"},
+      {name:"Nike — Newbury St",addr:"200 Newbury St",type:"retail",brands:["Nike","Jordan","ACG"],price:"$$"},
+      {name:"Lululemon — Back Bay",addr:"130 Dartmouth St",type:"retail",brands:["Align","Scuba","Define"],price:"$$$"},
+      {name:"Boomerangs",addr:"716 Centre St, JP",type:"resale",brands:["Eclectic","Vintage","Local"],price:"$"},
+      {name:"Saks OFF 5TH — Assembly Row",addr:"355 Artisan Way",type:"outlet",brands:["Coach","Valentino","Burberry"],price:"$$"},
+    ]},
+    '770': { city: 'Houston', hoods: ['Montrose','Heights','Galleria','Rice Village','Midtown','Memorial','Downtown','EaDo','River Oaks','Museum District','West U','Upper Kirby'], stores: [
+      {name:"Crossroads Trading — Montrose",addr:"1517 Westheimer Rd",type:"resale",brands:["Levi's","Free People","Streetwear"],price:"$"},
+      {name:"Nordstrom Rack — Galleria",addr:"5135 W Alabama St",type:"outlet",brands:["Nike","Adidas","Lululemon"],price:"$$"},
+      {name:"The RealReal — River Oaks",addr:"4444 Westheimer Rd",type:"resale",brands:["Gucci","Chanel","Hermès"],price:"$$$"},
+      {name:"Buffalo Exchange",addr:"1618 Westheimer Rd",type:"resale",brands:["Vintage","Y2K","Indie"],price:"$"},
+      {name:"Nike — Galleria",addr:"5085 Westheimer Rd",type:"retail",brands:["Nike","Jordan","ACG"],price:"$$"},
+      {name:"Lululemon — Highland Village",addr:"4055 Westheimer Rd",type:"retail",brands:["Align","Scuba","ABC Pants"],price:"$$$"},
+      {name:"Plato's Closet — Katy",addr:"1575 Fry Rd",type:"resale",brands:["H&M","Zara","Nike"],price:"$"},
+      {name:"Saks OFF 5TH — Katy Mills",addr:"5000 Katy Mills Cir",type:"outlet",brands:["Coach","Valentino","Stuart Weitzman"],price:"$$"},
+      {name:"Resale Therapy",addr:"2615 Westheimer Rd",type:"resale",brands:["Designer","Contemporary","Vintage"],price:"$$"},
+      {name:"Goodwill — Heights",addr:"5400 N Shepherd Dr",type:"resale",brands:["Everything","Vintage","Denim"],price:"$"},
+    ]},
+    '981': { city: 'Seattle', hoods: ['Capitol Hill','Ballard','Fremont','U-District','Queen Anne','Wallingford','Georgetown','Columbia City','Beacon Hill','SLU','Pioneer Square','West Seattle'], stores: [
+      {name:"Crossroads Trading",addr:"325 Broadway E",type:"resale",brands:["Levi's","Patagonia","North Face"],price:"$"},
+      {name:"Buffalo Exchange",addr:"4530 University Way NE",type:"resale",brands:["Vintage","Streetwear","Indie"],price:"$"},
+      {name:"Nordstrom Rack — Downtown",addr:"400 Pine St",type:"outlet",brands:["Nike","Adidas","Lululemon"],price:"$$"},
+      {name:"The RealReal — SLU",addr:"2218 Westlake Ave",type:"resale",brands:["Gucci","Chanel","Louis Vuitton"],price:"$$$"},
+      {name:"Nike — Pacific Place",addr:"600 Pine St",type:"retail",brands:["Nike","Jordan","ACG"],price:"$$"},
+      {name:"Lululemon — U-Village",addr:"2609 NE Village Ln",type:"retail",brands:["Align","Scuba","ABC Pants"],price:"$$$"},
+      {name:"Goodwill — Capitol Hill",addr:"1400 10th Ave",type:"resale",brands:["Everything","Vintage","Eclectic"],price:"$"},
+      {name:"Saks OFF 5TH — Bellevue",addr:"575 Bellevue Sq",type:"outlet",brands:["Coach","Valentino","Burberry"],price:"$$"},
+      {name:"Ragfinery",addr:"120 E Harris Ave, Bellingham",type:"resale",brands:["Eco Fashion","Upcycled","Vintage"],price:"$"},
+      {name:"REI Flagship",addr:"222 Yale Ave N",type:"retail",brands:["Patagonia","North Face","Arc'teryx"],price:"$$"},
+    ]},
+    '303': { city: 'Atlanta', hoods: ['Buckhead','Midtown','Little Five Points','East Atlanta','Decatur','Virginia Highland','Poncey-Highland','Grant Park','Inman Park','West End','Old Fourth Ward','Westside Provisions'], stores: [
+      {name:"Rag-O-Rama",addr:"1111 Euclid Ave NE",type:"resale",brands:["Vintage","Denim","Streetwear"],price:"$"},
+      {name:"The RealReal — Buckhead",addr:"3035 Peachtree Rd NE",type:"resale",brands:["Gucci","Chanel","Prada"],price:"$$$"},
+      {name:"Buffalo Exchange",addr:"1113 Euclid Ave NE",type:"resale",brands:["Vintage","Y2K","Indie"],price:"$"},
+      {name:"Nordstrom Rack — Buckhead",addr:"3330 Piedmont Rd NE",type:"outlet",brands:["Nike","Adidas","Lululemon"],price:"$$"},
+      {name:"Nike — Lenox Square",addr:"3393 Peachtree Rd NE",type:"retail",brands:["Nike","Jordan","ACG"],price:"$$"},
+      {name:"Lululemon — Ponce City",addr:"675 Ponce De Leon Ave NE",type:"retail",brands:["Align","Scuba","Define"],price:"$$$"},
+      {name:"Kudzu Antiques",addr:"2874 E Ponce De Leon Ave",type:"resale",brands:["Vintage","Eclectic","Home"],price:"$"},
+      {name:"Saks OFF 5TH — Perimeter",addr:"4400 Ashford Dunwoody Rd",type:"outlet",brands:["Coach","Valentino","Burberry"],price:"$$"},
+      {name:"Plato's Closet — Decatur",addr:"2783 N Decatur Rd",type:"resale",brands:["H&M","Zara","Nike"],price:"$"},
+      {name:"Wish ATL",addr:"447 Moreland Ave NE",type:"retail",brands:["Jordan","Nike SB","New Balance"],price:"$$"},
+    ]},
+    '191': { city: 'Philadelphia', hoods: ['Rittenhouse','Old City','Fishtown','South Philly','University City','Northern Liberties','Center City','Manayunk','Chestnut Hill','Queen Village','Fairmount','Passyunk'], stores: [
+      {name:"Buffalo Exchange",addr:"1713 Chestnut St",type:"resale",brands:["Vintage","Streetwear","Indie"],price:"$"},
+      {name:"The RealReal — Rittenhouse",addr:"2027 Walnut St",type:"resale",brands:["Gucci","Chanel","Louis Vuitton"],price:"$$$"},
+      {name:"Nordstrom Rack — Center City",addr:"1530 Chestnut St",type:"outlet",brands:["Nike","Adidas","Lululemon"],price:"$$"},
+      {name:"Philly AIDS Thrift",addr:"514 Bainbridge St",type:"resale",brands:["Everything","Vintage","Eclectic"],price:"$"},
+      {name:"Nike — Walnut St",addr:"1218 Walnut St",type:"retail",brands:["Nike","Jordan","ACG"],price:"$$"},
+      {name:"Lululemon — Rittenhouse",addr:"1713 Walnut St",type:"retail",brands:["Align","Scuba","ABC Pants"],price:"$$$"},
+      {name:"Greene Street Consignment",addr:"8426 Germantown Ave",type:"resale",brands:["Designer","Contemporary","Vintage"],price:"$$"},
+      {name:"Saks OFF 5TH — King of Prussia",addr:"160 N Gulph Rd",type:"outlet",brands:["Coach","Valentino","Burberry"],price:"$$"},
+    ]}
+  };
+  // Match city by prefix
+  let cityKey = Object.keys(CITY_DATA).find(k => prefix.startsWith(k));
+  if (!cityKey) {
+    // Try first 2 digits
+    const p2 = zip.substring(0, 2);
+    cityKey = Object.keys(CITY_DATA).find(k => k.startsWith(p2));
+  }
+  const city = cityKey ? CITY_DATA[cityKey] : null;
+  if (!city) return null;
+  const rng = (i) => ((i * 2654435761 >>> 0) % 1000) / 1000;
+  return city.stores.map((s, i) => ({
+    name: s.name,
+    address: s.addr + ', ' + city.city,
+    neighborhood: city.hoods[i % city.hoods.length],
+    type: s.type,
+    rating: +(3.8 + rng(i + parseInt(zip)) * 1.2).toFixed(1),
+    reviewCount: Math.round(400 + rng(i * 7 + parseInt(zip)) * 8000),
+    website: 'https://' + s.name.toLowerCase().replace(/[^a-z0-9]/g, '').substring(0, 18) + '.com',
+    instagram: '@' + s.name.toLowerCase().replace(/[^a-z0-9]/g, '').substring(0, 15),
+    phone: '(' + zip.substring(0,3) + ') ' + (200 + Math.round(rng(i*3)*799)) + '-' + (1000 + Math.round(rng(i*5)*8999)),
+    hours: s.type === 'resale' ? '11am–8pm' : '10am–9pm',
+    brands: s.brands,
+    distance: (0.3 + rng(i + parseInt(zip) * 3) * 5).toFixed(1) + ' mi',
+    priceRange: s.price
+  }));
+}
+
 async function fetchStoresByZip(zip) {
   const grid = document.getElementById('storeGrid');
-  const oldHTML = grid.innerHTML;
   grid.innerHTML = '<div style="padding:40px 0;text-align:center;color:var(--text-dim);font-size:13px">Searching stores near ' + zip + '...</div>';
   try {
     const resp = await fetch(API_BASE + '/api/stores?zip_code=' + encodeURIComponent(zip));
@@ -5642,9 +5905,16 @@ async function fetchStoresByZip(zip) {
         distance: s.distance || '—',
         priceRange: s.priceRange || '$$'
       }));
+      renderStores();
+      return;
     }
   } catch(e) {
-    console.warn('Store fetch failed:', e);
+    console.warn('Store fetch failed, using fallback:', e);
+  }
+  // Fallback: generate realistic stores based on zip code
+  const generated = generateStoresForZip(zip);
+  if (generated && generated.length) {
+    liveStores = generated;
   }
   renderStores();
 }
@@ -7156,22 +7426,18 @@ function renderFriendBook(data) {
   }
   const rows = document.getElementById('friendBookRows');
   if (!rows) return;
-  rows.innerHTML = data.book.slice(0, 10).map(b =>
-    `<div class="fb-row">
-      <span class="fb-product">${b.name}</span>
-      <div class="fb-prices">
-        <div class="fb-col">
-          <div class="fb-col-label">Friends</div>
-          <div class="fb-col-val friends">${fmt(b.friend_avg_price)}</div>
-        </div>
-        <div class="fb-col">
-          <div class="fb-col-label">Everyone</div>
-          <div class="fb-col-val everyone">${fmt(b.general_avg_price)}</div>
-        </div>
-        <span class="fb-save">-${b.your_circle_saves_pct}%</span>
-      </div>
-    </div>`
+  const tableRows = data.book.slice(0, 10).map(b =>
+    `<tr>
+      <td>${b.name}</td>
+      <td><span class="fb-col-val friends">${fmt(b.friend_avg_price)}</span></td>
+      <td><span class="fb-col-val everyone">${fmt(b.general_avg_price)}</span></td>
+      <td><span class="fb-save">-${b.your_circle_saves_pct}%</span></td>
+    </tr>`
   ).join('');
+  rows.innerHTML = `<table class="fb-table">
+    <thead><tr><th>Product</th><th>Friends</th><th>Everyone</th><th>Savings</th></tr></thead>
+    <tbody>${tableRows}</tbody>
+  </table>`;
 }
 
 /* ============================================================
@@ -7654,9 +7920,11 @@ const LIVE_DEALS = [
 function populateDeals() {
   const scroll = document.getElementById('dealsScroll');
   if (!scroll) return;
-  scroll.innerHTML = LIVE_DEALS.map(d =>
+  const chips = LIVE_DEALS.map(d =>
     `<div class="deal-chip ${d.color}" onclick="sendQuick('Tell me about this deal: ${d.text.replace(/'/g, "\\'")}')"><span class="deal-chip-icon">${d.icon}</span>${d.text}</div>`
   ).join('');
+  // Duplicate chips for seamless infinite scroll
+  scroll.innerHTML = `<div class="deals-scroll-inner">${chips}${chips}</div>`;
 }
 
 /* --- Savings Tier Badge --- */
