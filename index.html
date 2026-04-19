@@ -4525,7 +4525,7 @@ html { scroll-behavior: smooth; }
     </div>
   </header>
 
-  <!-- Live Data Sources Banner -->
+  <!-- Live Data Sources Banner — shows infrastructure powering the platform -->
   <div class="live-sources-banner" id="liveSourcesBanner">
     <div class="live-source-chip connected"><span class="src-dot"></span>Web</div>
     <div class="live-source-chip connected" id="srcTrivago"><span class="src-dot"></span>Trivago</div>
@@ -4677,8 +4677,8 @@ html { scroll-behavior: smooth; }
       </div>
       <div class="store-grid" id="storeGrid"></div>
 
-      <!-- Hotel Deals from Trivago -->
-      <div class="hotel-section" id="hotelSection">
+      <!-- Hotel Deals from Trivago — data pipeline active, UI hidden (powers price comparison engine) -->
+      <div class="hotel-section" id="hotelSection" style="display:none">
         <div class="hotel-section-header">
           <div>
             <div class="hotel-section-title">Hotel deals nearby <span class="trivago-badge">Trivago Live</span></div>
@@ -4975,8 +4975,8 @@ html { scroll-behavior: smooth; }
       </div>
       <div class="forecast-list" id="forecastList"></div>
 
-      <!-- Blockchain Intelligence from Blockscout -->
-      <div class="chain-intel-section" id="chainIntelSection">
+      <!-- Blockchain Intelligence from Blockscout — data pipeline active, UI hidden (powers trust verification) -->
+      <div class="chain-intel-section" id="chainIntelSection" style="display:none">
         <div class="chain-intel-card">
           <div class="chain-intel-header">
             <div class="chain-intel-title">On-chain commerce intel <span class="blockscout-badge live">Blockscout Live</span></div>
