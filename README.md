@@ -8,7 +8,7 @@
 
 ## Why This Problem
 
-I've spent the last three years inside trading pits — placing at the [Duke Fintech Trading Competition 2026](https://www.linkedin.com/in/yijia-sandra-cai/) as a Top Trader and winning the Phoenix Trading Competition in 2023. In quant finance, we obsess over microstructure: the spread between bid and ask, VWAP deviations, RSI extremes, mean reversion after an overreaction. We treat every basis point like it matters, because over thousands of trades, it does.
+I've spent the last three years inside trading pits — placing at the [Duke Fintech Trading Competition 2026](https://www.linkedin.com/in/yijia-sandra-cai/) as a Top Trader and winning the Phoenix Trading Competition in 2023. In quant finance, I obsess over microstructure: the spread between bid and ask, VWAP deviations, RSI extremes, mean reversion after an overreaction. I treat every basis point like it matters, because over thousands of trades, it does.
 
 Then I go shopping and watch friends pay $180 for a Nike hoodie that will be $119 in eleven days, or buy a hotel room at list price when the rate curve is clearly in contango. **Consumer shopping is the most inefficient market on Earth** — asymmetric information, emotional buyers, no order book, no execution discipline. Meanwhile, Phia is building the autonomous agent layer that could finally fix this: if the agent can "just handle it," why shouldn't it handle it *like a quant desk*?
 
@@ -45,7 +45,7 @@ This hits all three of Phia's interest areas — Autonomous Agents, Personalized
 
 **Personalization & Social** — Email subscription detection (auto-discovers deals from Nike, Sephora, etc.), contact import, friends' strategies and order books, live activity feed of friends' fills and savings.
 
-## Technical Challenges & How We Solved Them
+## Technical Challenges & How I Solved Them
 
 **1. Phia has no public API.** Phia's underlying shopping graph is proprietary, so there was no drop-in data source. I built a Phia-aligned data pipeline that composes web data extraction, email subscription parsing, and real-time price monitoring across a 40,000+ site universe into a normalized product graph that mirrors Phia's discovery surface. This is the unlock that made everything else possible.
 
@@ -63,4 +63,6 @@ AlgoShop reframes shopping as a market you can trade, not a menu you accept. The
 
 ## Built By
 
-Sandra Cai
+**Yijia (Sandra) Cai** — NYU · Top Trader, [Duke Fintech Trading Competition 2026](https://www.linkedin.com/in/yijia-sandra-cai/) · Winner Trader, Phoenix Trading Competition 2023 · [LinkedIn](https://www.linkedin.com/in/yijia-sandra-cai/)
+
+*Solo build over 24 hours at the Phia Hack, April 18–19, 2026.*
